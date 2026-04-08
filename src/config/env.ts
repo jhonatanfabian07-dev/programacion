@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+
+
 export const env = {
     port: Number(process.env.PORT) || 3000,
     mongoUri: process.env.MONGO_URI || 'mongodb://etitcproyecto:K7vRSWpK9O7yLZ6M@ac-ftjjuhw-shard-00-00.decbffu.mongodb.net:27017,ac-ftjjuhw-shard-00-01.decbffu.mongodb.net:27017,ac-ftjjuhw-shard-00-02.decbffu.mongodb.net:27017/?ssl=true&replicaSet=atlas-12xhle-shard-0&authSource=admin&appName=Cluster0',
