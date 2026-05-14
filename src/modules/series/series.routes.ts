@@ -1,30 +1,30 @@
 import { Router } from "express";
-import { MovieController } from "./movie.controller";
+import { SeriesController } from "./series.controller";
 
 import {
-    createMovieSchema,
-    updateMovieSchema
-} from "./movie.schema";
+    createSeriesSchema,
+    updateSeriesSchema
+} from "./series.schema";
 
 import { validate } from "../../middlewares/validate.middleware";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 
 const router = Router();
-const controller = new MovieController();
+const controller = new SeriesController();
 
 /**
  * @swagger
  * tags:
- *   name: Movies
- *   description: API de películas
+ *   name: Series
+ *   description: API de series
  */
 
 /**
  * @swagger
- * /movies:
+ * /series:
  *   post:
- *     summary: Crear película
- *     tags: [Movies]
+ *     summary: Crear serie
+ *     tags: [Series]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -38,47 +38,45 @@ const controller = new MovieController();
  *                 type: string
  *               genre:
  *                 type: string
+ *               seasons:
+ *                 type: number
  *               rating:
  *                 type: number
- *             example:
- *               name: Avatar
- *               genre: Sci-Fi
- *               rating: 9
  *     responses:
  *       201:
- *         description: Película creada correctamente
+ *         description: Serie creada
  */
 router.post(
     '/',
-    validate(createMovieSchema),
+    validate(createSeriesSchema),
     authMiddleware,
-    controller.addMovie
+    controller.addSeries
 );
 
 /**
  * @swagger
- * /movies:
+ * /series:
  *   get:
- *     summary: Obtener todas las películas
- *     tags: [Movies]
+ *     summary: Obtener series
+ *     tags: [Series]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de películas
+ *         description: Lista de series
  */
 router.get(
     '/',
     authMiddleware,
-    controller.findAllMovies
+    controller.findAllSeries
 );
 
 /**
  * @swagger
- * /movies/{id}:
+ * /series/{id}:
  *   put:
- *     summary: Actualizar película
- *     tags: [Movies]
+ *     summary: Actualizar serie
+ *     tags: [Series]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -87,32 +85,23 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la película
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             example:
- *               rating: 10
  *     responses:
  *       200:
- *         description: Película actualizada
+ *         description: Serie actualizada
  */
 router.put(
     '/:id',
-    validate(updateMovieSchema),
+    validate(updateSeriesSchema),
     authMiddleware,
-    controller.updateMovie
+    controller.updateSeries
 );
 
 /**
  * @swagger
- * /movies/{id}:
+ * /series/{id}:
  *   delete:
- *     summary: Eliminar película
- *     tags: [Movies]
+ *     summary: Eliminar serie
+ *     tags: [Series]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -121,15 +110,14 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
- *         description: ID de la película
  *     responses:
  *       200:
- *         description: Película eliminada
+ *         description: Serie eliminada
  */
 router.delete(
     '/:id',
     authMiddleware,
-    controller.deleteMovie
+    controller.deleteSeries
 );
 
 export default router;

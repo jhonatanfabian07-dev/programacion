@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import { MovieService } from "./movie.service";
-import { Movie } from "./movie.model";
+import { SeriesService } from "./series.service";
+import { Series } from "./series.model";
 
-export class MovieController {
+export class SeriesController {
 
-    private service = new MovieService();
+    private service = new SeriesService();
 
-    addMovie = async (req: Request, res: Response) => {
+    addSeries = async (req: Request, res: Response) => {
 
         try {
 
-            const data: Movie = req.body;
+            const data: Series = req.body;
 
-            const result = await this.service.addMovie(data);
+            const result = await this.service.addSeries(data);
 
             res.status(201).json(result);
 
@@ -24,11 +24,11 @@ export class MovieController {
         }
     }
 
-    findAllMovies = async (req: Request, res: Response) => {
+    findAllSeries = async (req: Request, res: Response) => {
 
         try {
 
-            const result = await this.service.findAllMovies();
+            const result = await this.service.findAllSeries();
 
             res.status(200).json(result);
 
@@ -40,17 +40,17 @@ export class MovieController {
         }
     }
 
-    updateMovie = async (req: Request, res: Response) => {
+    updateSeries = async (req: Request, res: Response) => {
 
         try {
 
             const id = req.params.id as string;
 
-            const result = await this.service.updateMovie(id, req.body);
+            const result = await this.service.updateSeries(id, req.body);
 
             if (!result) {
                 return res.status(404).json({
-                    message: "Película no encontrada"
+                    message: "Serie no encontrada"
                 });
             }
 
@@ -64,17 +64,17 @@ export class MovieController {
         }
     }
 
-    deleteMovie = async (req: Request, res: Response) => {
+    deleteSeries = async (req: Request, res: Response) => {
 
         try {
 
             const id = req.params.id as string;
 
-            const result = await this.service.deleteMovie(id);
+            const result = await this.service.deleteSeries(id);
 
             if (!result.deleted) {
                 return res.status(404).json({
-                    message: "Película no encontrada"
+                    message: "Serie no encontrada"
                 });
             }
 

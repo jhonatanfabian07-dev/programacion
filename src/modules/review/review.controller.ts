@@ -1,33 +1,97 @@
 import { Request, Response } from "express";
 import { ReviewService } from "./review.service";
+import { Review } from "./review.model";
 
 export class ReviewController {
 
-    private _ReviewService = new ReviewService();
+    private service = new ReviewService();
 
     addReview = async (req: Request, res: Response) => {
 
-        const data = {
-            ...req.body,
-            movie: req.body.movie.toLowerCase() // recomendado
-        };
+        try {
 
-        const result = await this._ReviewService.addReview(data);
+            const data: Review = {
+                ...req.body,
+                movie: req.body.movie.toLowerCase()
+            };
 
-        res.status(201).json(result)
+            const result = await this.service.addReview(data);
+
+            res.status(201).json(result);
+
+        } catch (error: any) {
+
+            res.status(500).json({
+                message: error.message
+            });
+        }
     }
 
-  findReviewsByMovie = async (req: Request, res: Response) => {
+    findReviewsByMovie = async (req: Request, res: Response) => {
 
-    const movie = req.params.movie as string; 
+        try {
 
-    if (!movie) {
-        return res.status(400).json({ message: "movie es requerido" });
+            const movie = req.params.movie as string;
+
+            const result = await this.service.findReviewsByMovie(
+                movie.toLowerCase()
+            );
+
+            res.status(200).json(result);
+
+        } catch (error: any) {
+
+            res.status(500).json({
+                message: error.message
+            });
+        }
     }
 
-    const result = await this._ReviewService.findReviewsByMovie(movie.toLowerCase());
+    updateReview = async (req: Request, res: Response) => {
 
-    res.status(200).json(result)
-}
+        try {
 
+            const id = req.params.id as string;
+
+            const result = await this.service.updateReview(id, req.body);
+
+            if (!result) {
+                return res.status(404).json({
+                    message: "Review no encontrada"
+                });
+            }
+
+            res.status(200).json(result);
+
+        } catch (error: any) {
+
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+
+    deleteReview = async (req: Request, res: Response) => {
+
+        try {
+
+            const id = req.params.id as string;
+
+            const result = await this.service.deleteReview(id);
+
+            if (!result.deleted) {
+                return res.status(404).json({
+                    message: "Review no encontrada"
+                });
+            }
+
+            res.status(200).json(result);
+
+        } catch (error: any) {
+
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
 }

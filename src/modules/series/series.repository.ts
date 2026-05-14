@@ -1,14 +1,14 @@
 import { getDb } from "../../config/database";
 import { ObjectId } from "mongodb";
-import { Review } from "./review.model";
+import { Series } from "./series.model";
 
-export class ReviewRepository {
+export class SeriesRepository {
 
     private collection(){
-        return getDb().collection('reviews');
+        return getDb().collection('series');
     }
 
-    async create(data: Review){
+    async addSeries(data: Series){
 
         const result = await this.collection().insertOne(data);
 
@@ -18,28 +18,25 @@ export class ReviewRepository {
         };
     }
 
-    async findReviewsByMovie(movie: string){
+    async findAllSeries(){
 
         return this.collection()
-            .find({ movie })
+            .find()
             .toArray();
     }
 
-    async updateReview(id: ObjectId, data: Partial<Review>) {
+    async updateSeries(id: ObjectId, data: Partial<Series>) {
 
-        await this.collection().updateOne(
+        const result = await this.collection().findOneAndUpdate(
             { _id: id },
-            { $set: data }
+            { $set: data },
+            { returnDocument: "after" }
         );
 
-        const updatedReview = await this.collection().findOne({
-            _id: id
-        });
-
-        return updatedReview;
+        return result;
     }
 
-    async deleteReview(id: ObjectId) {
+    async deleteSeries(id: ObjectId) {
 
         const result = await this.collection().deleteOne({
             _id: id
